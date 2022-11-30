@@ -30,7 +30,7 @@ data "aws_availability_zones" "all" {}
 # Create a Public subnet on the First available AZ
 #-------------------------------------------------
 
-resource "aws_subnet" "public_ap_south_1a" {
+resource "aws_subnet" "public_us_east_2a" {
   vpc_id     = aws_vpc.my_vpc.id
   cidr_block = var.subnet1_cidr
   availability_zone = data.aws_availability_zones.all.names[0]
@@ -71,8 +71,8 @@ resource "aws_route_table" "my_vpc_public" {
 #--------------------------------------------------------------
 # Associate the RouteTable to the Subnet created at ap-south-1a
 #--------------------------------------------------------------
-resource "aws_route_table_association" "my_vpc_ap_south_1a_public" {
-    subnet_id = aws_subnet.public_ap_south_1a.id
+resource "aws_route_table_association" "my_vpc_us_east_2a_public" {
+    subnet_id = aws_subnet.public_us_east_2a.id
     route_table_id = aws_route_table.my_vpc_public.id
 }
 
@@ -116,7 +116,7 @@ resource "aws_instance" "server" {
    instance_type = var.type
    key_name      = var.pemfile
    vpc_security_group_ids = [aws_security_group.instance.id]
-   subnet_id = aws_subnet.public_ap_south_1a.id
+   subnet_id = aws_subnet.public_us_east_2a.id
    availability_zone = data.aws_availability_zones.all.names[0]
    
    associate_public_ip_address = true
@@ -138,7 +138,7 @@ resource "aws_instance" "server" {
 #---------------------------------------------------
 # Create a Private subnet on the Second available AZ
 #---------------------------------------------------
-resource "aws_subnet" "private_ap_south_1b" {
+resource "aws_subnet" "private_us_east_2b" {
   vpc_id     = aws_vpc.my_vpc.id
   cidr_block = var.subnet2_cidr
   availability_zone = data.aws_availability_zones.all.names[1]
@@ -167,8 +167,8 @@ resource "aws_route_table" "my_vpc_private" {
 #----------------------------------------------------------------
 # Associate the DB RouteTable to the Subnet created at ap-south-1b
 #----------------------------------------------------------------
-resource "aws_route_table_association" "my_vpc_ap_south_1b_private" {
-    subnet_id = aws_subnet.private_ap_south_1b.id
+resource "aws_route_table_association" "my_vpc_us_east_2b_private" {
+    subnet_id = aws_subnet.private_us_east_2b.id
     route_table_id = aws_route_table.my_vpc_private.id
 }
 
@@ -205,7 +205,7 @@ resource "aws_instance" "db" {
    instance_type = var.type
    key_name      = var.pemfile
    vpc_security_group_ids = [aws_security_group.db.id]
-   subnet_id = aws_subnet.private_ap_south_1b.id
+   subnet_id = aws_subnet.private_us_east_2b.id
    availability_zone = data.aws_availability_zones.all.names[1]
    
    associate_public_ip_address = true
