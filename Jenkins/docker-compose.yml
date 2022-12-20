@@ -1,0 +1,15 @@
+version: '3'
+services:
+ web:
+  container_name: dev
+  image: "${DEPLOYIMAGE}"
+  ports:
+  - "8080:8080"
+  restart: always
+  depends_on:
+    - redis
+ redis:
+  container_name: devdb
+  image: "redis:alpine"
+  ports:
+  - "6379:6379"
